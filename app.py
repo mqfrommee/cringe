@@ -1,6 +1,5 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
-from waitress import serve
 import logging
 
 app = Flask(__name__)
@@ -20,11 +19,11 @@ def index():
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    logging.info("Запуск приложения..")
+    logging.info("Запуск приложения...")
 
     with app.app_context():
         db.create_all()  
         logging.info("База данных инициализирована.")
 
-    logging.info("Запуск сервера Waitress на порту 8000...")
-    serve(app, host='127.0.0.1', port=8000)
+    logging.info("Запуск сервера Flask на порту 5000...")
+    app.run(debug=True, host='0.0.0.0', port=5000)
