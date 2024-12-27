@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ПРОЕКТ X-34: ИНИЦИАЛИЗАЦИЯ ПРОТОКОЛА РЕАЛЬНОСТИ.</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
+
+        :root {
+            --neon-green: #00FF00;
+            --neon-red: #FF0000;
+            --dark-red: #330000;
+            --matrix-green: #003B00;
+            --cyber-blue: #0ff;
+            --alien-purple: #9d00ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            background-color: black;
+            color: var(--neon-green);
+            font-family: 'Share Tech Mono', monospace;
+            text-align: center;
+            overflow: hidden;
+            min-height: 100vh;
+            position: relative;
+            padding: 20px;
+        }
+
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%),
+                url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&q=80') center/cover;
+            z-index: -3;
+            opacity: 0.3;
+        }
+
+        .alien-planet {
+            position: fixed;
+            top: 10%;
+            right: -150px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 30% 30%,
+                    var(--alien-purple) 0%,
+                    #440044 60%,
+                    #220022 100%);
+            box-shadow: 
+                0 0 50px var(--alien-purple),
+                inset -30px -30px 50px rgba(0,0,0,0.5);
+            animation: planetRotate 120s linear infinite;
+            z-index: -2;
+        }
+
+        .orbital-rings {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: rotateRings 60s linear infinite;
+            z-index: -2;
+        }
+
+        .orbital-rings::before,
+        .orbital-rings::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            transform: translate(-50%, -50%) rotate(30deg);
+            border: 1px solid rgba(157, 0, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .orbital-rings::after {
+            width: 400px;
+            height: 400px;
+            transform: translate(-50%, -50%) rotate(60deg);
+            border-color: rgba(0, 255, 0, 0.1);
+        }
+
+        .space-debris {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: var(--cyber-blue);
+            animation: debrisFloat 8s linear infinite;
+            z-index: -1;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.15) 0px,
+                    rgba(0, 0, 0, 0.15) 1px,
+                    transparent 1px,
+                    transparent 2px
+                ),
+                repeating-radial-gradient(
+                    circle at 50% 50%,
+                    rgba(0, 59, 0, 0.1) 0%,
+                    rgba(0, 59, 0, 0.1) 50%,
+                    transparent 50%,
+                    transparent 100%
+                );
+            pointer-events: none;
+            animation: scanline 10s linear infinite;
+            opacity: 0.7;
+            z-index: 2;
+        }
+
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--cyber-blue);
+            position: fixed;
+            pointer-events: none;
+            border-radius: 50%;
+            mix-blend-mode: difference;
+            z-index: 9999;
+            transition: all 0.1s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            padding-top: 5vh;
+        }
+
+        .classified {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--neon-red);
+            font-size: 1.2em;
+            border: 2px solid var(--neon-red);
+            padding: 5px 10px;
+            transform: rotate(-5deg);
+            animation: pulse 2s infinite;
+        }
+
+        .coordinates {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: var(--cyber-blue);
+            font-size: 1em;
+            text-align: right;
+            font-family: 'VT323', monospace;
+        }
+
+        h1 {
+            font-size: 4.5em;
+            text-shadow: 0 0 10px var(--neon-green),
+                         0 0 20px var(--neon-green),
+                         0 0 30px var(--neon-green);
+            animation: glitch 3s infinite;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+
+        .reality-warning {
+            font-size: 2em;
+            color: var(--cyber-blue);
+            margin: 20px 0;
+            text-shadow: 0 0 10px var(--cyber-blue);
+            animation: flicker 2s infinite;
+        }
+
+        #warning {
+            font-size: 2.5em;
+            margin: 40px 0;
+            color: var(--neon-red);
+            text-shadow: 0 0 20px var(--neon-red);
+            animation: warningFlash 1.5s infinite;
+        }
+
+        #timer {
+            font-size: 5em;
+            color: var(--neon-red);
+            margin: 40px 0;
+            text-shadow: 0 0 15px var(--neon-red);
+            font-weight: bold;
+            animation: timerPulse 1s infinite;
+            font-family: 'VT323', monospace;
+        }
+
+        .matrix-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .reality-breach {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle at 50% 50%, 
+                                    transparent 0%, 
+                                    rgba(0, 255, 255, 0.1) 50%, 
+                                    transparent 100%);
+            animation: breach 10s infinite;
+            z-index: -2;
+        }
+
+        .system-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            text-align: left;
+            font-size: 0.8em;
+            color: var(--cyber-blue);
+            font-family: 'VT323', monospace;
+        }
+
+        .anomaly-detector {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 200px;
+            height: 100px;
+            border: 1px solid var(--cyber-blue);
+            padding: 10px;
+            font-size: 0.8em;
+            text-align: left;
+            animation: borderPulse 4s infinite;
+        }
+
+        @keyframes planetRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes rotateRings {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes debrisFloat {
+            0% { 
+                transform: translate(-100vw, -100vh) rotate(0deg); 
+                opacity: 0;
+            }
+            50% { opacity: 1; }
+            100% { 
+                transform: translate(100vw, 100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes breach {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.5); opacity: 0.1; }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); }
+            40% { transform: translate(-2px, -2px); filter: hue-rotate(180deg); }
+            60% { transform: translate(2px, 2px); filter: hue-rotate(270deg); }
+            80% { transform: translate(2px, -2px); filter: hue-rotate(360deg); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+                opacity: 0.99;
+                text-shadow: -1px -1px 0 var(--cyber-blue), 1px -1px 0 var(--cyber-blue), -1px 1px 0 var(--cyber-blue), 1px 1px 0 var(--cyber-blue);
+            }
+            20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+                opacity: 0.4;
+                text-shadow: none;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes borderPulse {
+            0%, 100% { border-color: var(--cyber-blue); }
+            50% { border-color: var(--neon-green); }
+        }
+
+        @keyframes warningFlash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes timerPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <div class="space-background"></div>
+    <div class="alien-planet"></div>
+    <div class="orbital-rings"></div>
+    <div class="custom-cursor"></div>
+    <div class="matrix-container"></div>
+    <div class="reality-breach"></div>
+    
+    <div class="container">
+        <div class="classified">СОВЕРШЕННО СЕКРЕТНО</div>
+        <div class="coordinates">
+            КООРДИНАТЫ: 56°49'N 60°36'E<br>
+            ВРЕМЕННАЯ ТОЧКА: 19██
+        </div>
+
+        <h1>ПРОЕКТ X-34: НАРУШЕНИЕ РЕАЛЬНОСТИ</h1>
+        
+        <div class="reality-warning">ОБНАРУЖЕНО СХОЖДЕНИЕ ПАРАЛЛЕЛЬНЫХ РЕАЛЬНОСТЕЙ</div>
+        
+        <div id="warning">ВНИМАНИЕ: КРИТИЧЕСКИЙ СБОЙ КВАНТОВОГО БАРЬЕРА</div>
+        
+        <div id="timer">00:10</div>
+
+        <div class="system-info">
+            СТАТУС СИСТЕМЫ:<br>
+            ■ КВАНТОВЫЙ БАРЬЕР: НЕСТАБИЛЕН<br>
+            ■ ЦЕЛОСТНОСТЬ РЕАЛЬНОСТИ: 34%<br>
+            ■ УРОВЕНЬ УГРОЗЫ: КРИТИЧЕСКИЙ
+        </div>
+
+        <div class="anomaly-detector">
+            ДЕТЕКТОР АНОМАЛИЙ:<br>
+            █████▓░░░░ 47%<br>
+            ОБНАРУЖЕНЫ ВРЕМЕННЫЕ ИСКАЖЕНИЯ
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.querySelector('.custom-cursor');
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        function createMatrixRain() {
+            const container = document.querySelector('.matrix-container');
+            const characters = 'アカサタナハマヤラワガザダバパイキシチニヒミリヰギジヂビピウクスツヌフムユルグズブヅプエケセテネヘメレヱゲゼデベペオコソトノホモヨロヲゴゾドボポヴッン0123456789';
+            const columns = Math.floor(window.innerWidth / 20);
+            
+            for (let i = 0; i < columns; i++) {
+                const column = document.createElement('div');
+                column.style.position = 'absolute';
+                column.style.left = (i * 20) + 'px';
+                column.style.top = Math.random() * -1000 + 'px';
+                column.style.color = '#0F0';
+                column.style.fontFamily = 'monospace';
+                column.style.fontSize = '20px';
+                column.style.filter = 'blur(0.5px)';
+                
+                let y = 0;
+                const interval = setInterval(() => {
+                    column.textContent = characters[Math.floor(Math.random() * characters.length)];
+                    column.style.top = y + 'px';
+                    y += 20;
+                    if (y > window.innerHeight) {
+                        y = Math.random() * -1000;
+                    }
+                }, 50 + Math.random() * 100);
+                
+                container.appendChild(column);
+            }
+        }
+
+        function createSpaceDebris() {
+            const debris = document.createElement('div');
+            debris.className = 'space-debris';
+            debris.style.left = Math.random() * window.innerWidth + 'px';
+            debris.style.top = Math.random() * window.innerHeight + 'px';
+            document.body.appendChild(debris);
+            
+            debris.addEventListener('animationend', () => {
+                debris.remove();
+            });
+        }
+
+        let timeLeft = 10;
+        const timerElement = document.getElementById('timer');
+        const warningElement = document.getElementById('warning');
+        
+        function updateTimer() {
+            if (timeLeft <= 0) {
+                document.body.style.animation = 'glitch 0.3s infinite';
+                timerElement.textContent = 'РЕАЛЬНОСТЬ НАРУШЕНА';
+                warningElement.textContent = 'КРИТИЧЕСКАЯ ОШИБКА: КОЛЛАПС НЕИЗБЕЖЕН';
+                document.body.style.backgroundColor = '#300';
+                return;
+            }
+            
+            if (Math.random() < 0.3) {
+                timerElement.textContent = '██:██';
+                setTimeout(() => {
+                    timerElement.textContent = `00:${timeLeft < 10 ? '0' : ''}${timeLeft}`;
+                }, 100);
+            } else {
+                timerElement.textContent = `00:${timeLeft < 10 ? '0' : ''}${timeLeft}`;
+            }
+            
+            timeLeft--;
+        }
+
+        function realityDistortions() {
+            const messages = [
+                'ВНИМАНИЕ: ОБНАРУЖЕН ВРЕМЕННОЙ ПАРАДОКС',
+                'КРИТИЧЕСКОЕ ИСКАЖЕНИЕ РЕАЛЬНОСТИ',
+                'НАРУШЕНИЕ КВАНТОВОЙ ЦЕЛОСТНОСТИ',
+                'СХОЖДЕНИЕ ПАРАЛЛЕЛЬНЫХ МИРОВ',
+                'ПРОСТРАНСТВЕННО-ВРЕМЕННАЯ АНОМАЛИЯ'
+            ];
+            
+            if (Math.random() < 0.3) {
+                warningElement.textContent = messages[Math.floor(Math.random() * messages.length)];
+                warningElement.style.transform = `skew(${Math.random() * 20 - 10}deg)`;
+                setTimeout(() => {
+                    warningElement.style.transform = 'skew(0deg)';
+                }, 200);
+            }
+        }
+
+        function updateCoordinates() {
+            const coordinates = document.querySelector('.coordinates');
+            const randomOffset = (Math.random() * 0.01).toFixed(4);
+            coordinates.innerHTML = `КООРДИНАТЫ: 56°${49 + randomOffset}'N 60°${36 + randomOffset}'E<br>ВРЕМЕННАЯ ТОЧКА: 19██`;
+        }
+
+        createMatrixRain();
+        setInterval(createSpaceDebris, 1000);
+        setInterval(updateTimer, 1000);
+        setInterval(realityDistortions, 2000);
+        setInterval(updateCoordinates, 5000);
+
+        setInterval(() => {
+            if (Math.random() < 0.1) {
+                document.body.style.filter = `
+                    hue-rotate(${Math.random() * 360}deg) 
+                    blur(${Math.random() * 2}px)
+                `;
+                setTimeout(() => {
+                    document.body.style.filter = 'none';
+                }, 100);
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
