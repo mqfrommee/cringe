@@ -22,8 +22,7 @@ if __name__ == '__main__':
     logging.info("Запуск приложения...")
 
     with app.app_context():
-        db.create_all()  
+        db.create_all()
         logging.info("База данных инициализирована.")
 
-    logging.info("Запуск сервера Flask на порту 5000...")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    logging.info("Ожидание сервера Waitress на порту 8000...")
